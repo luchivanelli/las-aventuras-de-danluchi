@@ -1,0 +1,58 @@
+// Prisma 6 + Neon (PostgreSQL serverless)
+// Compatible con la base de datos de la v1: solo agrega columnas opcionales e índices,
+// así que `npm run db:push` no pierde datos.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Plan {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @default("")
+  /// Fecha sin hora en formato yyyy-MM-dd
+  date        String?
+  category    String
+  status      String   @default("pendiente")
+  priority    String   @default("media")
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  memory Memory?
+
+  @@index([status])
+  @@index([date])
+}
+
+model Memory {
+  id          String   @id @default(cuid())
+  note        String   @default("")
+  reflection  String   @default("")
+  completedAt DateTime @default(now())
+
+  planId String  @unique
+  plan   Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  photos Photo[]
+}
+
+model Photo {
+  id        String   @id @default(cuid())
+  /// URL segura de Cloudinary (o data URL heredada de la v1)
+  url       String
+  /// public_id de Cloudinary, necesario para borrar el archivo
+  publicId  String?
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now())
+
+  memoryId String
+  memory   Memory @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@index([memoryId])
+}

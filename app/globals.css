@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+/* `dark:` sigue al atributo data-theme que pone el script del <head> (no al media query). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  --color-cream: #fbf7f3;
+  --color-paper: #ffffff;
+  --color-ink: #2a1e23;
+  --color-muted: #776870;
+  --color-line: #efe4e1;
+  --color-line-strong: #e2d2cf;
+
+  --color-rose-50: #fdf3f5;
+  --color-rose-100: #f8e5e9;
+  --color-rose-200: #f1c9d2;
+  --color-rose-300: #e4a3b2;
+  --color-rose-400: #d57a90;
+  --color-rose-500: #c2566f;
+  --color-rose-600: #a9435b;
+  --color-rose-700: #8a3449;
+  /* Fijo en ambos temas: fondos de botones con texto blanco. */
+  --color-rose-deep: #a9435b;
+
+  /* Fondo de los fines de semana en el calendario. */
+  --color-tint: #fdf8f6;
+
+  /* Fijos en ambos temas: texto sobre fondos oscuros y velos sobre fotos. */
+  --color-on-dark: #fbf7f3;
+  --color-night: #2a1e23;
+
+  --color-wine-700: #6e2a40;
+  --color-wine-800: #561f31;
+  --color-wine-900: #3d1523;
+
+  --color-gold: #b8915a;
+  --color-gold-soft: #f4ead9;
+  --color-gold-ink: #6b4f27;
+  --color-sage: #5f8c78;
+  --color-sage-soft: #e3efe9;
+  --color-danger: #c0392b;
+
+  --radius-4xl: 2rem;
+
+  --shadow-soft: 0 1px 2px rgb(42 30 35 / 0.04), 0 8px 24px -8px rgb(42 30 35 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(42 30 35 / 0.05), 0 18px 40px -12px rgb(169 67 91 / 0.22);
+  --shadow-rose: 0 10px 28px -8px rgb(194 86 111 / 0.55);
+
+  --animate-shimmer: shimmer 1.6s linear infinite;
+
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+}
+
+:root {
+  color-scheme: light;
+  --skeleton-a: #f3ebe8;
+  --skeleton-b: #faf5f3;
+  --cal-out-bg: #faf6f4;
+  --cal-out-stripe: rgb(226 210 207 / 0.45);
+}
+
+/* ─── Modo oscuro ─────────────────────────────────────────────────────────
+   Redefine los tokens: todo lo que usa bg-paper, text-ink, rose-50, etc. cambia solo. */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-cream: #161013;
+  --color-paper: #211a1d;
+  --color-ink: #f3e9ec;
+  --color-muted: #a8979e;
+  --color-line: #33282c;
+  --color-line-strong: #46383d;
+  --color-tint: #1d1619;
+
+  /* Tonos claros → fondos oscuros teñidos; tonos oscuros → texto claro legible. */
+  --color-rose-50: #2d1b22;
+  --color-rose-100: #3b2029;
+  --color-rose-200: #562b39;
+  --color-rose-300: #77394b;
+  --color-rose-400: #d57a90;
+  --color-rose-500: #d0647d;
+  --color-rose-600: #e28aa0;
+  --color-rose-700: #efaabb;
+
+  --color-gold: #cfa86f;
+  --color-gold-soft: #2e2519;
+  --color-gold-ink: #e8d2a8;
+  --color-sage-soft: #1c2a24;
+  --color-danger: #e5685a;
+
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -8px rgb(0 0 0 / 0.45);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.3), 0 18px 40px -12px rgb(0 0 0 / 0.6);
+  --shadow-rose: 0 10px 28px -8px rgb(194 86 111 / 0.4);
+
+  --skeleton-a: #261e21;
+  --skeleton-b: #30272a;
+  --cal-out-bg: #1a1316;
+  --cal-out-stripe: rgb(70 56 61 / 0.45);
+
+  /* Categorías: fondo = color mezclado con el papel, texto = color aclarado. */
+  --cat-citas-soft: color-mix(in oklab, #c2566f 26%, #211a1d);
+  --cat-citas-ink: color-mix(in oklab, #c2566f 45%, #fff);
+  --cat-salidas-soft: color-mix(in oklab, #5f8c78 26%, #211a1d);
+  --cat-salidas-ink: color-mix(in oklab, #5f8c78 45%, #fff);
+  --cat-viajes-soft: color-mix(in oklab, #4f7cb0 26%, #211a1d);
+  --cat-viajes-ink: color-mix(in oklab, #4f7cb0 45%, #fff);
+  --cat-comidas-soft: color-mix(in oklab, #b8915a 26%, #211a1d);
+  --cat-comidas-ink: color-mix(in oklab, #b8915a 45%, #fff);
+  --cat-futbol-soft: color-mix(in oklab, #5e9a4f 26%, #211a1d);
+  --cat-futbol-ink: color-mix(in oklab, #5e9a4f 45%, #fff);
+  --cat-entrenamiento-soft: color-mix(in oklab, #8661b8 26%, #211a1d);
+  --cat-entrenamiento-ink: color-mix(in oklab, #8661b8 45%, #fff);
+  --cat-sorpresas-soft: color-mix(in oklab, #c06a4f 26%, #211a1d);
+  --cat-sorpresas-ink: color-mix(in oklab, #c06a4f 45%, #fff);
+}
+
+/* Al cambiar de tema, sin transiciones: si no, cada elemento se desvanece a su ritmo. */
+[data-theme-switching] *,
+[data-theme-switching] *::before,
+[data-theme-switching] *::after {
+  transition: none !important;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    font-feature-settings: "ss01";
+  }
+
+  ::selection {
+    @apply bg-rose-200 text-ink;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-rose-500;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.55;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-3xl border border-line bg-paper shadow-soft;
+  }
+
+  .field {
+    @apply w-full rounded-2xl border border-line-strong bg-paper px-4 py-3 text-[15px] text-ink placeholder:text-muted/70 transition outline-none;
+    @apply focus:border-rose-400 focus:ring-4 focus:ring-rose-100;
+  }
+
+  .label {
+    @apply mb-1.5 block text-[13px] font-semibold text-ink/80;
+  }
+
+  .skeleton {
+    @apply rounded-2xl animate-shimmer;
+    background: linear-gradient(90deg, var(--skeleton-a) 0%, var(--skeleton-b) 50%, var(--skeleton-a) 100%);
+    background-size: 200% 100%;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Días del calendario que no pertenecen al mes: rayado suave tipo agenda. */
+  .cal-out {
+    background-color: var(--cal-out-bg);
+    background-image: repeating-linear-gradient(135deg, transparent 0 6px, var(--cal-out-stripe) 6px 7px);
+  }
+
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+  }
+
+  /* Ocultar elementos animados por GSAP hasta que corra la animación (evita el "flash"
+     inicial). <Reveal> los vuelve visibles; sin JS o con menos movimiento se ven igual. */
+  .reveal-scope [data-reveal] {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-scope [data-reveal] {
+    visibility: visible !important;
+  }
+}
